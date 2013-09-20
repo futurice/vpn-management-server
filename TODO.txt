@@ -1,5 +1,0 @@
-- Documentation
-- Duplicate code in "vpnapi" (API interface) and "vpnconf" (web UI)
-- Static paths in lib/vpncert
-- Upgrade Django
-
