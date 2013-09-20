@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}VPN management - create new certificate{% endblock %}
+
+{% block content %}
+
+<h1>Finished</h1>
+
+<p>You have successfully created new VPN certificate. Please note following information:</p>
+
+<ul>
+<li>You are <b>not allowed to share your VPN certificate with anyone, ever</b>.</li>
+<li>If you generated new certificate with same name as old certificate, old certificate is <b>revoked</b> now.</li>
+<li>New certificate should work right away.</li>
+<li>You can download ZIP file. It's also in your Futurice email box.</li>
+</ul>
+
+<p>ZIP file above containts certificate for your VPN and sample OpenVPN configuration files for Mac OS X, Linux and Windows. Please note that there may be need to make minor changes to provided configuration files (for 
+example configure paths).</p>
+
+<p><a class="btn btn-large btn-success" href="/vpn/static/zip/{{ cn }}.zip">Download configuration file</a></p>
+
+
+<p>This wizard is now finished. If you need help with configuring OpenVPN to your computer, please contact IT team.</p>
+
+{% endblock %}

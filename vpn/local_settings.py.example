@@ -1,0 +1,11 @@
+RAVEN_CONFIG = {
+ 'dsn': 'sentry_url_with_tokens',
+ 'register_signals': True,
+}
+
+PIWIK_SITE_ID = "piwik_site_id"
+PIWIK_SERVER_ADDRESS = "piwik_server_address/piwik.php"
+
+#LDAP_AUTH SETTINGS
+LDAP_SERVER = "ldap_server_uri"
+LDAP_PASSWORD = "ldap_bind_password"

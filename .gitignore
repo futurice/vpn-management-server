@@ -1,0 +1,10 @@
+syntax: glob
+*.pyc
+*.save
+vpn/vpn.pid
+vpn/vpn.db
+vpn/libs/vpncert/password.py
+vpn/libs/vpncert/.rnd
+.rnd
+vpn/static/zip
+vpn/local_settings.py

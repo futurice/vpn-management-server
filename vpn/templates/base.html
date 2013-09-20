@@ -1,0 +1,84 @@
+<html>
+	<head>
+		<title>{% block title %}VPN management{% endblock %}</title>
+
+    <link href="https://cdn.futurice.com/bootstrap/latest/css/bootstrap.css" rel="stylesheet">
+    <style type="text/css">
+      body {
+        padding-top: 60px;
+        padding-bottom: 40px;
+      }
+    </style>
+    <link href="https://cdn.futurice.com/bootstrap/latest/css/bootstrap-responsive.css" rel="stylesheet">
+
+
+    <script type="text/javascript" src="https://cdn.futurice.com/js/jquery-1.7.1.min.js"></script> 
+
+    <script src="https://cdn.futurice.com/bootstrap/latest/js/bootstrap-transition.js"></script>
+    <script src="https://cdn.futurice.com/bootstrap/latest/js/bootstrap-alert.js"></script>
+    <script src="https://cdn.futurice.com/bootstrap/latest/js/bootstrap-modal.js"></script>
+    <script src="https://cdn.futurice.com/bootstrap/latest/js/bootstrap-dropdown.js"></script>
+    <script src="https://cdn.futurice.com/bootstrap/latest/js/bootstrap-scrollspy.js"></script>
+    <script src="https://cdn.futurice.com/bootstrap/latest/js/bootstrap-tab.js"></script>
+    <script src="https://cdn.futurice.com/bootstrap/latest/js/bootstrap-tooltip.js"></script>
+    <script src="https://cdn.futurice.com/bootstrap/latest/js/bootstrap-popover.js"></script>
+    <script src="https://cdn.futurice.com/bootstrap/latest/js/bootstrap-button.js"></script>
+    <script src="https://cdn.futurice.com/bootstrap/latest/js/bootstrap-collapse.js"></script>
+    <script src="https://cdn.futurice.com/bootstrap/latest/js/bootstrap-carousel.js"></script>
+    <script src="https://cdn.futurice.com/bootstrap/latest/js/bootstrap-typeahead.js"></script>
+
+		{% block header %}
+		{% endblock %}
+	</head>
+	<body>
+
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </a>
+          <a class="brand" href="{% url index %}">VPN management</a>
+
+          <div class="nav-collapse">
+            <ul class="nav">
+              <li><a href="{% url index %}">Dashboard</a></li>
+              <li><a href="{% url create_new %}">Create new VPN / renew</a></li>
+		{% if user.is_superuser %}<li><a href="{% url admin_list %}">Admin</a></li>{% endif %}
+		{% block menu %}{%endblock %}
+            </ul>
+          </div><!--/.nav-collapse -->
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+{% block content %}
+{% endblock %}
+
+      <hr>
+
+      <footer>
+        <p>&copy; Futurice Ltd 2012</p>
+      </footer>
+
+    </div> <!-- /container -->
+
+
+<!-- Piwik --> 
+<script type="text/javascript">
+var pkBaseURL = (("https:" == document.location.protocol) ? "https://analytics.futurice.com/piwik/" : "http://analytics.futurice.com/piwik/");
+document.write(unescape("%3Cscript src='" + pkBaseURL + "piwik.js' type='text/javascript'%3E%3C/script%3E"));
+</script><script type="text/javascript">
+try {
+var piwikTracker = Piwik.getTracker(pkBaseURL + "piwik.php", 16);
+piwikTracker.trackPageView();
+piwikTracker.enableLinkTracking();
+} catch( err ) {}
+</script><noscript><p><img src="http://analytics.futurice.com/piwik/piwik.php?idsite=16" style="border:0" alt="" /></p></noscript>
+<!-- End Piwik Tracking Code -->
+	</body>
+</html>

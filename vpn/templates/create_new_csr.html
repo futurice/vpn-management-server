@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}VPN management - create new certificate{% endblock %}
+
+{% block content %}
+
+<h1>Valid Certificate Signing Request (CSR)</h1>
+
+<p>You have created valid CSR. Please confirm that this information is valid, especially the common name field.</p>
+
+<table class="table table-striped">
+<tr>
+<th>Common name:</th>
+<td>{{ fields.common_name }}</td>
+</tr>
+<tr>
+<th>City:</th>
+<td>{{ fields.city }}</td>
+</tr>
+<tr>
+<th>State:</th>
+<td>{{ fields.state }}</td>
+</tr>
+<tr>
+<th>Country:</th>
+<td>{{ fields.country }}</td>
+</tr>
+<tr>
+<th>Organization Unit:</th>
+<td>{{ fields.organizationunit }}</td>
+</tr>
+<tr>
+<th>Organization:</th>
+<td>{{ fields.organization }}</td>
+</tr>
+<tr>
+<th>Algorithm:</th>
+<td>{{ fields.algorithm }}</td>
+</tr>
+<tr>
+<th>Key length:</th>
+<td>{{ fields.bitlength }}bits</td>
+</tr>
+</table>
+
+<p>Please validate this information. In next step, <b>you'll receive SMS message containing password</b>. This is the final validation of your identity. The SMS will be sent to mobile phone number recorded in the LDAP directory. Delivery time is usually few seconds, but it might take up to 30 seconds. If no SMS message is received within 30 seconds, something is broken.</p>
+
+<p>If something is incorrect, please generate new CSR and <a href="{% url create_new %}">upload it again</a>.</p>
+
+<p><a class="btn btn-large btn-success" href="{% url create_new_send_password%}">Continue</a> or <a class="btn btn-large" href="{% url create_new %}">upload CSR again</a></p>
+
+
+{% endblock %}

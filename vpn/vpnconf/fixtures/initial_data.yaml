@@ -1,0 +1,65 @@
+- model: vpnconf.Employment
+  pk: 1
+  fields:
+   name: ""
+   descr: Employee
+- model: vpnconf.Employment
+  pk: 2
+  fields:
+   name: ext
+   descr: External
+
+- model: vpnconf.Computertype
+  pk: 1
+  fields:
+   name: laptop
+   descr: Laptop
+
+- model: vpnconf.Computertype
+  pk: 2
+  fields:
+   name: desktop
+   descr: Desktop
+
+- model: vpnconf.Computertype
+  pk: 3
+  fields:
+   name: mobile
+   descr: Mobile phone
+
+- model: vpnconf.Computerowner
+  pk: 1
+  fields:
+   name: ""
+   descr: Futurice
+
+- model: vpnconf.Computerowner
+  pk: 2
+  fields:
+   name: home
+   descr: Home
+
+- model: vpnconf.HelpChoices
+  pk: 1
+  fields:
+   name: ""
+   descr: "No help needed"
+
+- model: vpnconf.HelpChoices
+  pk: 2
+  fields:
+   name: "Windows"
+   descr: "Windows"
+
+- model: vpnconf.HelpChoices
+  pk: 3
+  fields:
+   name: "Ubuntu"
+   descr: "Ubuntu"
+
+- model: vpnconf.HelpChoices
+  pk: 4
+  fields:
+   name: "Mac OS X"
+   descr: "Mac OS X"
+

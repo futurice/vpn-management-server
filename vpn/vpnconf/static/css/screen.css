@@ -1,0 +1,458 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+ul {
+    padding-left: 2em;
+}
+body {
+	font-family: "Bitstream Vera Sans", sans-serif;
+	line-height: 1.5em;
+}
+#messages, #content {
+    width: 900px;
+	padding-left: 1em;
+	margin-top: 1.5em;
+}
+p {
+    padding-left: 0.4em;
+    padding-top: 1em;
+}
+.hidden {
+    visibility: hidden;
+}
+.display-none {
+    display: none;
+}
+/* ------TITLES/HEADERS-------- */
+/*------------------------------*/
+h1 {
+	font-size: 2em;
+	line-height: 1.5em;
+	font-weight: normal;
+}
+h2 {
+	font-size: 1.5em;
+	line-height: 1em;
+	font-weight: normal;
+        padding-top: 1em;
+}
+h3 { 
+	font-weight: normal;
+        padding-top: 1em;
+}
+.category-title{
+    background-color: #e6e6e6;
+    border-top: 1px dotted #4a9017;
+    color: DimGray;
+    padding-left: 0.4em;
+}
+.table-title, .panel-title {
+    padding-top: 0.3em;
+    border-top: none;
+    padding-bottom: 0.3em;
+    padding-left: 0.3em;
+    background-color: #4a9017;
+    color: white;
+}
+/* ---------- LINKS ----------- */
+/*------------------------------*/
+a:link, a:active{
+	color: blue;
+	text-decoration: none;
+	border: none;
+}
+a.helpbutton, a:visited, .actions input, #toolbar a:link, #toolbar a:visited, #toolbar a:active{
+	color: blue;
+	text-decoration: none;
+}
+#toolbar a:hover, a.helpbutton:hover{
+	color: DarkRed;
+	text-decoration: none;
+}
+a img {
+    border: none;
+}
+
+/* ------ PANELS and TABLES ----*/
+/*------------------------------*/
+.panel, table {
+	border: 2px solid #4a9017;
+	line-height: 1.5em;
+	margin-bottom: 1.5em;
+}
+
+/* ---------- PANELS -----------*/
+/*------------------------------*/
+.panel {
+    padding: 1.5em 1em 1.5em 1em;
+}
+
+/* ---------- TABLES ---------- */
+/*------------------------------*/
+table {
+	border-collapse: collapse;
+    width: 100%;
+}
+.nest table {
+    margin-bottom: 0em;
+    border: none;
+}
+table.vertical td, table.vertical th, table.horizontal td, table.horizontal th{
+	padding: 0em 0.5em;
+}
+td {
+    font-size: 90%;
+    padding: 0.2em;
+}
+th {
+	background-color: #e6e6e6;
+	text-align: left;
+	font-weight: normal;
+	padding: 0.2em;
+}
+tr.even {  }
+tr.odd {
+    background-color: #f0f0f0;
+}
+
+/*Vertical tables*/
+table.vertical th, table.vertical.form th {
+	text-align: right;
+}
+table.vertical th {
+	width: 12em;
+	background-color: #e6e6e6;
+}
+table.vertical td {
+	min-width: 20em;
+}
+table.vertical td {
+	min-width: 20em;
+}
+
+/*horizontal tables*/
+table.horizontal td {
+	min-width: 7em;
+}
+table.horizontal th, table.horizontal td {
+    border-right: 1px dotted silver;
+    padding-left: 0.5em;
+}
+table.horizontal th.span-right {
+    border-right: none;
+}
+table.horizontal td.span-right {
+    border-right: none;
+}
+
+
+/* ----------FORMS------------- */
+/*------------------------------*/
+form {
+    display: inline;
+}
+ul.errorlist { 
+	list-style-type: none;
+}
+
+/*table.form*/
+table.form {
+    border: 1px solid silver;
+    font-size: 0.8em;
+    line-height: 1.875em; }
+
+table.form th {
+    padding-left: 1em;
+    vertical-align: top;
+    padding-top: 0.4em;
+    font-weight: normal;
+} 
+table.form td {
+    padding: 0.5em 1em;
+    font-size: 0.8em;
+}
+table.form input[type="text"], table.form select {
+	width: 30%;
+}
+
+/*inline-form*/
+.inline-form input, .inline-form textarea{
+    width:5em;
+    height: 2em;
+}
+
+
+/* ---------- HELP ------------ */
+/*------------------------------*/
+.help {
+    background-color: white;
+    color: DarkGreen;
+	font-size: 0.8em;
+	line-height: 1.4em;
+    border: 1px solid #4a9017;
+    border-bottom: none
+}
+.help table {
+    color: DarkGreen;
+	font-size: 1.0em;
+    border-right: none;
+    border-left: none;
+	margin-bottom: 1em;
+}
+.help h4{
+    padding-top: 0.5em;
+    padding-left: 0.4em;
+    color: blue;
+}
+table .help {
+    border-right: none;
+    border-left: none;
+}
+.help td, .help th {
+	background-color: #eef3e9;
+}
+.help th {
+    margin: 0;  
+    padding: 0 1em 0 1em;
+    padding-right: 0.5em;
+    vertical-align: top;
+    white-space: nowrap;
+}
+
+/* ---------- MESSAGES -------- */
+/*------------------------------*/
+#messages-inner {
+    padding: 1.5em 0 1.5em 0;
+    border: 1px solid #4a9017;
+	background-color: #f0f0f0;
+    width: 100%
+}
+
+/* ---------- TOOLBAR --------- */
+/*------------------------------*/
+#toolbar {
+	height: 3.0em;
+    padding-top: 0.5em;
+}
+#toolbar li {
+	display: block;
+	float: left;
+	margin: 0 1em;
+	padding: 0;
+}
+.menutitle {
+    font-weight: bold;
+}
+#toolbar li {
+	position: relative;
+}
+#toolbar li ul, ul#toolbar li ul li {
+	margin: 0;
+	padding: 0;
+}
+#toolbar li ul li {
+	margin-right: 0.5em;
+}
+
+/* ---------- TITLEBAR --------- */
+/*------------------------------*/
+
+#authbar {
+	float: right;
+	margin-right: 1em;
+	font-size: 1.2em;
+	font-weight: bold;
+	line-height: 2.5em;
+    color: white;
+}
+#titlebar {
+	height: 3em;
+	background: url('/vpn/static/images/bg_navigation.png') repeat-x bottom left;
+    color: white;
+	padding-left: 1em;
+}
+#titlebar h1 {
+    margin-bottom: 0.5em;
+}
+#futurice-logo{
+    float: left;
+}
+#futurice-logo .icon {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    background-color: white;
+}
+#futurice-logo {
+    margin-right: 1em;
+}
+
+
+/* ---------- MISC ------------ */
+/*------------------------------*/
+/*CHARTS*/
+.chart .chart-filling{
+    background-color: red;
+}
+.chart {
+    background-color: green;
+    margin-top: 0.2em;
+}
+table.vertical .chart{
+    width: 200px;
+    height: 1em;
+    float: right;
+}
+table.horizontal .chart{
+    width: 100px;
+    height: 0.7em;
+}
+/*active - busy*/
+tr.actions .icon, tr.busy .icon {
+    float: left;
+    height: 1.6em;
+    margin-left: -0.2em;
+}
+tr.actions td, tr.actions th{
+    background-color: #dcefff;
+}
+tr.busy td, tr.busy th{
+    background-color: #dbdbdb;
+    color: gray;
+}
+#server-list tr.busy td, #server-list tr.busy th{
+    background-color: #F3DBDB;
+}
+table.vertical tr.busy, table.vertical tr.actions {
+    height: 3em;
+}
+/*disabled*/
+.disabled{
+    color: gray;
+}
+/*toggle help, expand*/
+a.helpbutton {
+    float: right;
+    padding-right: 1em;
+    font-size: 12px;
+}
+a.expandbutton {
+    color: #4a9017;
+}
+/*errors*/
+.errorlist {
+    color: red;
+}
+/*log*/
+.log-entry {
+    padding: 0.3em 0.3em 0.3em 0.3em;
+    margin-right: 2em;
+}
+#paginated-log table{
+    margin-bottom: 0;
+}
+.log-level-warning {
+    color: DarkOrange;
+}
+.log-level-error {
+    color: FireBrick;
+}
+/*pages*/
+.step-links {
+    background-color: #4a9017;
+    color: white;
+}
+.step-links .previous{
+    float: left;
+    padding-left: 1em;
+}
+.step-links .next{
+    float: right;
+    padding-right: 1em;
+}
+.step-links .current{
+    width: 100%;
+    text-align: center;
+}
+.step-links .unavailable{
+    visibility: hidden;
+}
+/*server list*/
+#server-list td.span-right{
+    text-align: right;
+}
+/*lvm list*/
+#lvm-list .chart{
+    float: right;
+}
+/*Job list*/
+tr.job-failed {
+    background-color: MistyRose;
+}
+tr.job-successful {
+    background-color: PaleGreen;
+}
+td.job-report {
+    font-size: 80%;
+    font-family: courier;
+}
+
+/*rounded bar*/
+.rounded-bar .center {
+    height: 6px;
+    background-color: #4a9017;
+    overflow: hidden;
+}
+.corner {
+    overflow: hidden;
+    width: 6px;
+    height: 6px;
+}
+.rounded-bar .left.corner {
+    float: left;
+    background: transparent url('/vpn/static/images/green-corner.gif') no-repeat scroll left top
+}
+.rounded-bar .right.corner {
+    float: right;
+    background: transparent url('/vpn/static/images/green-corner.gif') no-repeat scroll right top
+}
+#futurice-logo .left.corner, #futurice-logo .right.corner {
+    background-image: url('/vpn/static/images/white-corner.gif')
+}
+#futurice-logo .center {
+    background-color: white;
+}
+
+/*firewall config*/
+#firewall-config-form li {
+    list-style: none;
+}
+#firewall-config-form ul {
+    padding-left: 0;
+}
+.rule-formset div.dynamic-form, .rule-formset a.add-row {
+    margin-left: 1.5em;
+}
+
+/*table sorter*/
+th.sorting{
+    background-image: url('/vpn/static/images/no_order.gif');
+    background-repeat: no-repeat;
+    background-position: 95% center;
+}
+th.sorting_desc{
+    background-image: url('/vpn/static/images/incr_order.gif');
+    background-repeat: no-repeat;
+    background-position: 95% center;
+}
+th.sorting_asc{
+    background-image: url('/vpn/static/images/decr_order.gif');
+    background-repeat: no-repeat;
+    background-position: 95% center;
+}
+
+/*default value*/
+.default-value{
+    color: grey;
+    font-style: italic;
+}

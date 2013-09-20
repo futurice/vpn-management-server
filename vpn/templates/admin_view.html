@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>List of certificates</h1>
+
+{% if certs %}
+ <ul>
+  {% for cert in certs %}
+   {% if cert.not_after_days > -20 %}
+   <li>{% if cert.not_after_days < 0 %}<s>{{ cert.filename }}: valid from {{cert.not_before_printable}} to {{cert.not_after_printable}}</s>{% else %}
+   {{ cert.filename }}: valid from {{cert.not_before_printable}} to {{cert.not_after_printable}} ({{ cert.not_after_days }} days left){% endif %}</li>
+   {% endif %}
+  {% endfor %}
+ </ul>
+{% else %}
+ <p>No certificates.</p>
+{% endif %}
+
+{% endblock %}

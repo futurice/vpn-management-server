@@ -1,0 +1,13 @@
+--2013-09-18 13:01:41--  https://backupmaster2.futurice.com:13013/cgi-bin/sendsms?username=kanneluser&password=df89asj89I23hvcxSDasdf3298jvkjc839&to=00358503005963&text=eemaemezi
+Resolving backupmaster2.futurice.com... 188.117.1.115
+Connecting to backupmaster2.futurice.com|188.117.1.115|:13013... connected.
+WARNING: cannot verify backupmaster2.futurice.com's certificate, issued by `/C=FI/ST=Uusimaa/L=Helsinki/O=Futurice/OU=SSL/CN=backupmaster2.futurice.com/emailAddress=ssl@futurice.com':
+  Self-signed certificate encountered.
+HTTP request sent, awaiting response... 202 Accepted
+Length: 24 [text/html]
+Saving to: `STDOUT'
+
+     0K                                                       100% 17.7M=0s
+
+2013-09-18 13:01:41 (17.7 MB/s) - written to stdout [24/24]
+

@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}VPN management - create new certificate{% endblock %}
+
+{% block content %}
+
+{% if preferences %}
+<h1>Your VPN CSR configuration</h1>
+
+<p>Please generate the CSR request using these values. After that you can upload your CSR and continue to CSR validation step. If you missed the link in the first step, there is <a 
+href="https://confluence.futurice.com/display/usup/Setting+up+your+VPN">instructions</a>.</p>
+
+<div class="well">
+<ul>
+<li>Country: FI</li>
+<li>State: Uusimaa</li>
+<li>City: Helsinki</li>
+<li>Organization: Futurice Oy</li>
+<li>Organization Unit: OpenVPN Machines</li>
+<li>Common name: {{ cn }}</li>
+<li>email: {{ preferences.email }}</li>
+</ul>
+</div>
+
+{% endif %}
+
+{% if errors %}
+
+<h1>Errors with your CSR</h1>
+
+<ul>
+{% for error in errors %}
+ <li>{{ error }}</li>
+{% endfor %}
+</ul>
+
+{% endif %}
+
+<h1>Upload CSR</h1>
+
+<form  enctype="multipart/form-data" method="post" action="">{% csrf_token %}
+<input type="hidden" name="phase" value="csr">
+<table>
+{{ form.as_table }}
+<tr><th></th><td><input type="submit" value="Send"></td></tr>
+</table>
+</form>
+{% endblock %}
