@@ -1,6 +1,7 @@
 # Django settings for vpn project.
 import os
 import sys
+from local_settings import *
 
 sys.path.append(os.path.abspath(".") + "/libs/vpncert/")
 
@@ -23,8 +24,6 @@ DATABASES = {
         'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
     }
 }
-
-import local_settings
 
 AUTHENTICATION_BACKENDS = (
         'vpn.ldap_auth.auth.RemoteUserLDAPBackend',
