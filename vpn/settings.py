@@ -83,11 +83,16 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
+SESSION_SERIALIZER="django.contrib.sessions.serializers.PickleSerializer"
+
+
 ROOT_URLCONF = 'vpn.urls'
 
 TEMPLATE_DIRS = (
     os.path.join(os.path.dirname(__file__), 'templates'),
 )
+
+CRISPY_TEMPLATE_PACK="bootstrap3"
 
 INSTALLED_APPS = (
     'django.contrib.auth',
@@ -95,9 +100,10 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.messages',
-    'vpn.ldap_auth',
-    'vpn.vpnconf',
-    'vpn.vpnapi',
+    'crispy_forms',
+    'ldap_auth',
+    'vpnconf',
+    'vpnapi',
     'django.contrib.admin',
     'piwikapi',
     'raven.contrib.django',

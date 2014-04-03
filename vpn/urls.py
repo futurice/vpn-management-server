@@ -1,9 +1,8 @@
 import os
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from django.conf import settings
 from django.contrib.auth.views import login, logout
 from django.contrib import admin
-from django.views.generic.simple import direct_to_template
 
 from django.contrib import admin
 admin.autodiscover()
@@ -12,6 +11,7 @@ from vpn.vpnconf.views import indexview, create_new, create_new_csr, create_new_
 from vpn.vpnapi.views import post_csr, post_verification
 
 from vpn.logs.views import push_log_entries, get_last_timestamp
+from django.views.generic.base import RedirectView
 
 from django.http import HttpResponse
 
@@ -26,7 +26,7 @@ urlpatterns = patterns('',
     url(r'^api/post_verification', post_verification),
 
     url(r'^accounts/login', 'vpn.vpnconf.views.login'),
-    url(r'^$', 'django.views.generic.simple.redirect_to', {'url': '/vpn/vpnconf/'}),
+    url(r'^$', RedirectView.as_view(url='/vpn/vpnconf/', permanent=False)),
 
     url(r'^vpnconf/$', indexview, name="index", kwargs={"template_name": "index.html"}),
 

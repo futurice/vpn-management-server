@@ -5,14 +5,25 @@
 <h1>List of certificates</h1>
 
 {% if certs %}
- <ul>
+<table class="table table-striped">
+  <tbody>
   {% for cert in certs %}
    {% if cert.not_after_days > -20 %}
-   <li>{% if cert.not_after_days < 0 %}<s>{{ cert.filename }}: valid from {{cert.not_before_printable}} to {{cert.not_after_printable}}</s>{% else %}
-   {{ cert.filename }}: valid from {{cert.not_before_printable}} to {{cert.not_after_printable}} ({{ cert.not_after_days }} days left){% endif %}</li>
+    <tr>
+	{% if cert.not_after_days < 0 %}
+		<td><s>{{ cert.filename }}</s></td>
+		<td></td>
+		<td><s>{{cert.not_before_printable}} -- {{cert.not_after_printable}}</s></td>
+	{% else %}
+		<td>{{ cert.filename }}</td>
+		<td>{{ cert.not_after_days }} days left</td>
+		<td>{{cert.not_before_printable}} -- {{cert.not_after_printable}}</td>
+	{% endif %}
+    </tr>
    {% endif %}
   {% endfor %}
- </ul>
+  </tbody>
+</table>
 {% else %}
  <p>No certificates.</p>
 {% endif %}
