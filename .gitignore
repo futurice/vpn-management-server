@@ -1,6 +1,7 @@
 syntax: glob
 *.pyc
 *.save
+vpn/-
 vpn/vpn.pid
 vpn/vpn.db
 vpn/libs/vpncert/password.py
