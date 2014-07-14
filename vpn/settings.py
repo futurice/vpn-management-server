@@ -9,7 +9,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Olli Jarva', 'olli.jarva@futurice.com'),
+    #('Your Name', 'your_name@domain.com'),
 )
 
 MANAGERS = ADMINS
@@ -105,8 +105,6 @@ INSTALLED_APPS = (
     'vpnconf',
     'vpnapi',
     'django.contrib.admin',
-    'piwikapi',
-    'raven.contrib.django',
     'logs',
 )
 TEMPLATE_DEBUG = True
