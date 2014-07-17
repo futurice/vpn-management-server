@@ -12,12 +12,7 @@ from email.MIMEBase import MIMEBase
 from email.MIMEText import MIMEText
 from email.Utils import COMMASPACE, formatdate
 from email import Encoders
-
-VPN_CITIES = ["Helsinki", "Tampere", "Berlin", "Berliini"]
-VPN_STATES = ["Uusimaa"]
-VPN_COUNTRIES = ["FI", "DE"]
-VPN_ORGANIZATIONS = ["Futurice Oy", "Futurice Gmbh", "Futurice", "Futurice Ltd"]
-VPN_OU = ["OpenVPN Machines"]
+from django.conf import settings
 
 class alert:
     def __init__(self, dry_run=False):
@@ -61,7 +56,7 @@ IT Team
 
 
     def run(self):
-        for filename in glob("/home/vpn/futurice_certificates/futurice_openvpn_machine/keys/*-*.crt"):
+        for filename in glob(settings.KEYPATH + "/*-*.crt"):
              certinfo = self.vpncert.process_cert(filename)
              if certinfo is None:
                   continue
@@ -117,7 +112,7 @@ class vpncert(object):
 
     def list_all_certs(self):
         certs = []
-        for filename in glob("/home/vpn/futurice_certificates/futurice_openvpn_machine/keys/*-*.crt"):
+        for filename in glob(settings.KEYPATH + "/*-*.crt"):
              certinfo = self.process_cert(filename)
              if certinfo is not None:
                   certs.append(certinfo)
@@ -125,7 +120,7 @@ class vpncert(object):
 
     def listcerts(self):
         certs = []
-        for filename in glob("/home/vpn/futurice_certificates/futurice_openvpn_machine/keys/"+self.username+"-*.crt"):
+        for filename in glob(settings.KEYPATH + "/" +self.username + "-*.crt"):
              certinfo = self.process_cert(filename)
              if certinfo is not None:
                   certs.append(certinfo)
@@ -153,24 +148,24 @@ class vpncert(object):
                     arg = arg.split("=")
                     if arg[0] == 'C': #country
                         fields['country'] = arg[1]
-                        if arg[1] not in VPN_COUNTRIES:
-                            errors.append("Please read country name rules. (was %s, expecting %s)" % (arg[1], VPN_COUNTRIES))
+                        if arg[1] not in settings.VPN_COUNTRIES:
+                            errors.append("Please read country name rules. (was %s, expecting %s)" % (arg[1], settings.VPN_COUNTRIES))
                     elif arg[0] == 'ST': # State
                         fields['state'] = arg[1]
-                        if arg[1] not in VPN_STATES:
-                            errors.append("Please read state name rules. (was %s, expecting %s)" % (arg[1], VPN_STATES))
+                        if arg[1] not in settings.VPN_STATES:
+                            errors.append("Please read state name rules. (was %s, expecting %s)" % (arg[1], settings.VPN_STATES))
                     elif arg[0] == 'L': # City
                         fields['city'] = arg[1]
-                        if arg[1] not in VPN_CITIES:
-                            errors.append("Please read city name rules. (was %s, expecting %s)" % (arg[1], VPN_CITIES))
+                        if arg[1] not in settings.VPN_CITIES:
+                            errors.append("Please read city name rules. (was %s, expecting %s)" % (arg[1], settings.VPN_CITIES))
                     elif arg[0] == 'O': # Organization
                         fields['organization'] = arg[1]
-                        if arg[1] not in VPN_ORGANIZATIONS:
-                            errors.append("Please read organization name rules. (was %s, expecting %s)" % (arg[1], VPN_ORGANIZATIONS))
+                        if arg[1] not in settings.VPN_ORGANIZATIONS:
+                            errors.append("Please read organization name rules. (was %s, expecting %s)" % (arg[1], settings.VPN_ORGANIZATIONS))
                     elif arg[0] == 'OU': # Organization unit
                         fields['organizationunit'] = arg[1]
-                        if arg[1] not in VPN_OU:
-                            errors.append("Please read organization unit name rules. (was %s, expecting %s)" % (arg[1], VPN_OU))
+                        if arg[1] not in settings.VPN_OU:
+                            errors.append("Please read organization unit name rules. (was %s, expecting %s)" % (arg[1], settings.VPN_OU))
                     elif arg[0] == 'CN': # CN
                         tmp = arg[1].split("/")
                         fields['common_name'] = tmp[0]
