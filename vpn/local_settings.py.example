@@ -1,11 +1,20 @@
-RAVEN_CONFIG = {
- 'dsn': 'sentry_url_with_tokens',
- 'register_signals': True,
-}
-
-PIWIK_SITE_ID = "piwik_site_id"
-PIWIK_SERVER_ADDRESS = "piwik_server_address/piwik.php"
-
 #LDAP_AUTH SETTINGS
 LDAP_SERVER = "ldap_server_uri"
 LDAP_PASSWORD = "ldap_bind_password"
+
+SECRET_KEY=''
+
+""" URL for sending SMS """
+SMS_URL = "https://smsserver.com/sendsms?number=%s&content=%s"
+
+""" SETTINGS FOR VPN """
+VPN_CITIES = []
+VPN_STATES = []
+VPN_COUNTRIES = []
+VPN_ORGANIZATIONS = []
+VPN_OU = []
+
+
+KEYPATH = "/path/to/keys"
+
+OPENSSL_CNF_PATH = "/path/to/openssl.cnf"

@@ -1,4 +1,4 @@
-from password import Password
+#from password import Password
 from vpncert import vpncert
 
 import time
@@ -17,31 +17,31 @@ import subprocess
 import logging
 import os.path
 from shutil import move, copy, rmtree
-KEYPATH="/home/vpn/futurice_certificates/futurice_openvpn_machine/keys"
+from django.conf import settings
 
 class repository(object):
     def prepare_repository(self):
         logging.debug("Running hg pull")
         args = ["hg", "pull"]
-        pid = subprocess.Popen(args, cwd=KEYPATH)
+        pid = subprocess.Popen(args, cwd=settings.KEYPATH)
         pid.wait()
         logging.debug("Running hg update")
         args = ["hg", "update"]
-        pid = subprocess.Popen(args, cwd=KEYPATH)
+        pid = subprocess.Popen(args, cwd=settings.KEYPATH)
         pid.wait()
 
     def finish_repository(self, message):
         logging.debug("Running hg add")
         args = ["hg", "add"]
-        pid = subprocess.Popen(args, cwd=KEYPATH)
+        pid = subprocess.Popen(args, cwd=settings.KEYPATH)
         pid.wait()
         logging.debug("Running hg commit -m %s" % message)
         args = ["hg", "commit", "-m", message]
-        pid = subprocess.Popen(args, cwd=KEYPATH)
+        pid = subprocess.Popen(args, cwd=settings.KEYPATH)
         pid.wait()
         logging.debug("Running hg push")
         args = ["hg", "push"]
-        pid = subprocess.Popen(args, cwd=KEYPATH)
+        pid = subprocess.Popen(args, cwd=settings.KEYPATH)
         pid.wait()
         
 
@@ -74,9 +74,9 @@ class sign(object):
             return self.valid
         self.repository.prepare_repository()
         cn = self.fields['common_name']
-        move(self.csrfile, "%s/%s.csr" % (KEYPATH, cn))
-        args = ["openssl", "ca", "-batch", "-days", "365", "-out", "%s/%s.crt" % (KEYPATH, cn), "-in", "%s/%s.csr" % (KEYPATH, cn), "-md", "sha1", "-config", "/home/vpn/futurice_certificates/futurice_openvpn_machine/openssl.cnf", "-passin", "pass:%s" % self.password]
-        env_list = {"KEY_DIR": KEYPATH,
+        move(self.csrfile, "%s/%s.csr" % (setings.KEYPATH, cn))
+        args = ["openssl", "ca", "-batch", "-days", "365", "-out", "%s/%s.crt" % (settings.KEYPATH, cn), "-in", "%s/%s.csr" % (settings.KEYPATH, cn), "-md", "sha1", "-config", settings.OPENSSL_CNF_PATH, "-passin", "pass:%s" % self.password]
+        env_list = {"KEY_DIR": settings.KEYPATH,
             "KEY_SIZE": "2048",
             "PATH": "/bin:/usr/bin:/usr/sbin:/sbin",
             "KEY_COUNTRY": "FI",
@@ -100,11 +100,11 @@ class sign(object):
             return self.valid
         self.repository.prepare_repository()
         cn = self.fields['common_name']
-        if not os.path.exists("%s/%s.crt" % (KEYPATH, cn)):
+        if not os.path.exists("%s/%s.crt" % (settings.KEYPATH, cn)):
             # No old crt available -> no reason to revoke
             return False
-        args = ["openssl", "ca", "-revoke", "%s/%s.crt" % (KEYPATH, cn), "-config", "/home/vpn/futurice_certificates/futurice_openvpn_machine/openssl.cnf", "-passin", "pass:%s" % self.password]
-        env_list = {"KEY_DIR": KEYPATH,
+        args = ["openssl", "ca", "-revoke", "%s/%s.crt" % (settings.KEYPATH, cn), "-config", settings.OPENSSL_CNF_PATH, "-passin", "pass:%s" % self.password]
+        env_list = {"KEY_DIR": settings.KEYPATH,
             "KEY_SIZE": "2048",
             "PATH": "/bin:/usr/bin:/usr/sbin:/sbin",
             "KEY_COUNTRY": "FI",
@@ -115,11 +115,11 @@ class sign(object):
             "PKCS11_PIN": "1298479823754987",
             "KEY_CN": "futurice-invalid",
             "KEY_EMAIL": "ssl@futurice.com",
-            "CRL": "%s/crl.pem" % KEYPATH,
+            "CRL": "%s/crl.pem" % settings.KEYPATH,
             "KEY_OU": "OpenVPN Machines"}
         pid = subprocess.Popen(args, env=env_list)#, stdout=subprocess.PIPE)
         (stdoutmsg, stderrmsg) = pid.communicate()
-        args = ["openssl", "ca", "-gencrl", "-out", "%s/crl.pem" % KEYPATH, "-config", "/home/vpn/futurice_certificates/futurice_openvpn_machine/openssl.cnf", "-passin", "pass:%s" % self.password]
+        args = ["openssl", "ca", "-gencrl", "-out", "%s/crl.pem" % settings.KEYPATH, "-config", settings.OPENSSL_CNF_PATH, "-passin", "pass:%s" % self.password]
         pid = subprocess.Popen(args, env=env_list)#, stdout=subprocess.PIPE)
         (stdoutmsg, stderrmsg) = pid.communicate()
         self.repository.finish_repository("Revoked certificate %s" % cn)
@@ -192,8 +192,8 @@ comp-lzo"""
             f.write(LINUXCONF % (endpoint, cn, cn))
             f.close()
         
-        copy("%s/%s.crt" % (KEYPATH, cn), tempdir+"/%s.crt" % cn)
-        copy("%s/chain_futurice_openvpn_server_ca.pem" % KEYPATH, "%s/chain_futurice_openvpn_server_ca.pem" % tempdir)
+        copy("%s/%s.crt" % (settings.KEYPATH, cn), tempdir+"/%s.crt" % cn)
+        copy("%s/chain_futurice_openvpn_server_ca.pem" % settings.KEYPATH, "%s/chain_futurice_openvpn_server_ca.pem" % tempdir)
         
         zip = zipfile.ZipFile("/home/vpn/vpn/vpn/static/zip/%s.zip" % cn, "w")
         for filename in glob("%s/*" % tempdir):
@@ -249,15 +249,15 @@ IT team
 
         cn = self.fields['common_name']
         args = ["ssh", "vpnintegration@holmium.futurice.com", "-t", "sudo /root/vpnintegration.sh %s" % cn]
-        pid = subprocess.Popen(args, cwd=KEYPATH)
+        pid = subprocess.Popen(args, cwd=settings.KEYPATH)
         pid.wait()
         time.sleep(5)
 
         logging.debug("Running vpn integration script in 10.4.0.3")
         args = ["ssh", "vpnintegration@10.4.0.3", "-t", "sudo /root/vpnintegration.sh %s" % cn]
-        pid = subprocess.Popen(args, cwd=KEYPATH)
+        pid = subprocess.Popen(args, cwd=settings.KEYPATH)
         pid.wait()
         time.sleep(5)
         args = ["ssh", "vpnintegration@10.4.0.4", "-t", "sudo /root/vpnintegration.sh %s" % cn]
-        pid = subprocess.Popen(args, cwd=KEYPATH)
+        pid = subprocess.Popen(args, cwd=settings.KEYPATH)
         pid.wait()

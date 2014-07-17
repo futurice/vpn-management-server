@@ -9,7 +9,7 @@ DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    ('Olli Jarva', 'olli.jarva@futurice.com'),
+    #('Your Name', 'your_name@domain.com'),
 )
 
 MANAGERS = ADMINS
@@ -64,9 +64,6 @@ MEDIA_URL = '/vpn/static/'
 # trailing slash.
 ADMIN_MEDIA_PREFIX = '/media/'
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = 'a(wzgm0=6f(-80*7)q8c+la*w(#&n5kfum60x$yem@gqehalco'
-
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -105,8 +102,6 @@ INSTALLED_APPS = (
     'vpnconf',
     'vpnapi',
     'django.contrib.admin',
-    'piwikapi',
-    'raven.contrib.django',
     'logs',
 )
 TEMPLATE_DEBUG = True
