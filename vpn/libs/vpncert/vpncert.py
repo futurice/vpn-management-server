@@ -14,7 +14,7 @@ from email.Utils import COMMASPACE, formatdate
 from email import Encoders
 from django.conf import settings
 
-class alert:
+class alert(object):
     def __init__(self, dry_run=False):
         self.dry_run = dry_run
         self.vpncert = vpncert()

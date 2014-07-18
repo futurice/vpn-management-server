@@ -241,23 +241,3 @@ IT team
         smtp.sendmail("it@futurice.com", email, msg.as_string())
         smtp.close()
 
-    def deploy(self):
-        """ Deploys to VPN server (loads new certificates, adds firewall rules and DNS name) """
-        if not self.valid:
-            logging.error("Trying to run deploy with invalid certificate")
-            return self.valid
-
-        cn = self.fields['common_name']
-        args = ["ssh", "vpnintegration@holmium.futurice.com", "-t", "sudo /root/vpnintegration.sh %s" % cn]
-        pid = subprocess.Popen(args, cwd=settings.KEYPATH)
-        pid.wait()
-        time.sleep(5)
-
-        logging.debug("Running vpn integration script in 10.4.0.3")
-        args = ["ssh", "vpnintegration@10.4.0.3", "-t", "sudo /root/vpnintegration.sh %s" % cn]
-        pid = subprocess.Popen(args, cwd=settings.KEYPATH)
-        pid.wait()
-        time.sleep(5)
-        args = ["ssh", "vpnintegration@10.4.0.4", "-t", "sudo /root/vpnintegration.sh %s" % cn]
-        pid = subprocess.Popen(args, cwd=settings.KEYPATH)
-        pid.wait()
