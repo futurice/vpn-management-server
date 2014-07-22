@@ -12,7 +12,8 @@ from email.MIMEBase import MIMEBase
 from email.MIMEText import MIMEText
 from email.Utils import COMMASPACE, formatdate
 from email import Encoders
-from django.conf import settings
+import settings
+from django.template.loader import render_to_string
 
 class alert(object):
     def __init__(self, dry_run=False):
@@ -20,34 +21,25 @@ class alert(object):
         self.vpncert = vpncert()
 
     def send_alert(self, certinfo):
-        alert_msg = """Hi,
-Your Futurice VPN certificate %s is going to expire in %s days.
+        text = render_to_string('mails/alert_mail.txt', 
+            {"cert_name" : certinfo["filename"].replace(".crt", ""), "days_left" : certinfo["not_after_days"]})
 
-If you still need VPN, please go to https://vpnmanagement.futurice.com/ and follow
-instructions to renew it. If you don't need VPN, you can just ignore these mails.
-
-You get this email 30 days and 14 days before certificate expires. Also, for last 5
-days, you get this email every day.
-
-Best regards,
-IT Team
-""" % (certinfo["filename"].replace(".crt", ""), certinfo["not_after_days"])
         if self.dry_run:
             print alert_msg
             return
         email = certinfo["filename"].split("-")
-        email = "%s@futurice.com" % (email[0])
+        email = "%s@%s" % (email[0], settings.DOMAIN)
         msg = MIMEMultipart()
-        msg['From'] = "admin@futurice.com"
+        msg['From'] = settings.EMAIL_FROM
         msg['To'] = email
         msg['Date'] = formatdate(localtime=True)
-        msg['Subject'] = "Futurice VPN cert is going to expire"
-        msg.attach( MIMEText(alert_msg) )
+        msg['Subject'] = settings.ALERT_MAIL_SUBJECT
+        msg.attach( MIMEText(text) )
 
         logging.debug("Sending email to %s with subject %s" % (msg["To"], msg["Subject"]))
-        smtp = smtplib.SMTP("smtpgw.futurice.com")
+        smtp = smtplib.SMTP(settings.SMTP)
         try:
-            smtp.sendmail("admin@futurice.com", email, msg.as_string())
+            smtp.sendmail(settings.EMAIL_FROM, email, msg.as_string())
         except:
             print "Sending email to %s failed." % email
             return

@@ -27,7 +27,7 @@ def get_binded_connection():
     Returns a binded LDAP connection, with the LDAP parameters in defined in the settings.
     """
     con = ldap.initialize(settings.LDAP_SERVER)
-    con.simple_bind_s("cn=vimma,dc=futurice,dc=com", settings.LDAP_PASSWORD)
+    con.simple_bind_s(settings.LDAP_USER, settings.LDAP_PASSWORD)
     return con
 
 def get_user(username) :

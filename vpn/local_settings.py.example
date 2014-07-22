@@ -1,5 +1,6 @@
 #LDAP_AUTH SETTINGS
 LDAP_SERVER = "ldap_server_uri"
+LDAP_USER = "ldap_bind_user"
 LDAP_PASSWORD = "ldap_bind_password"
 
 SECRET_KEY=''
@@ -14,7 +15,10 @@ VPN_COUNTRIES = []
 VPN_ORGANIZATIONS = []
 VPN_OU = []
 
+EMAIL_FROM = "admin@localhost.com"
+ALERT_MAIL_SUBJECT = "VPN cert is going to expire"
+SERTIFICATE_MAIL_SUBJECT = "Your VPN certificate for %s"
+SMTP = "smtp.localhost"
 
 KEYPATH = "/path/to/keys"
-
 OPENSSL_CNF_PATH = "/path/to/openssl.cnf"

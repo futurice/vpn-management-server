@@ -1,4 +1,4 @@
-#from password import Password
+from password import Password
 from vpncert import vpncert
 
 import time
@@ -18,6 +18,7 @@ import logging
 import os.path
 from shutil import move, copy, rmtree
 from django.conf import settings
+from django.template.loader import render_to_string
 
 class repository(object):
     def prepare_repository(self):
@@ -74,7 +75,7 @@ class sign(object):
             return self.valid
         self.repository.prepare_repository()
         cn = self.fields['common_name']
-        move(self.csrfile, "%s/%s.csr" % (setings.KEYPATH, cn))
+        move(self.csrfile, "%s/%s.csr" % (settings.KEYPATH, cn))
         args = ["openssl", "ca", "-batch", "-days", "365", "-out", "%s/%s.crt" % (settings.KEYPATH, cn), "-in", "%s/%s.csr" % (settings.KEYPATH, cn), "-md", "sha1", "-config", settings.OPENSSL_CNF_PATH, "-passin", "pass:%s" % self.password]
         env_list = {"KEY_DIR": settings.KEYPATH,
             "KEY_SIZE": "2048",
@@ -208,24 +209,13 @@ comp-lzo"""
 
         cn = self.fields['common_name']
 
-        text = """Hi,
-Please see attached zip file. There is your certificate and sample configuration files for Mac, Linux and Windows.
-
-If you have problems with configuring OpenVPN, please look at our OpenVPN instructions:
-https://confluence.futurice.com/display/IT/OpenVPN
-If you can't find answer to your problem, please come to see IT team, or send email (you can reply to this email).
-
-Please remember that VPN certificates and keys are absolutely private. You may never share your VPN keys with anyone else.
-
---
-IT team
-"""
+        text = render_to_string('mails/sertificate_confirm.txt')
 
         msg = MIMEMultipart()
-        msg['From'] = "admin@futurice.com"
+        msg['From'] = settings.EMAIL_FROM
         msg['To'] = email
         msg['Date'] = formatdate(localtime=True)
-        msg['Subject'] = "Your VPN certificate for %s" % cn
+        msg['Subject'] = settings.SERTIFICATE_MAIL_SUBJECT % cn
         msg.attach( MIMEText(text) )
 
         zip_filename = "/home/vpn/vpn/vpn/static/zip/%s.zip" % cn
@@ -237,7 +227,7 @@ IT team
         msg.attach(part)
 
         logging.debug("Sending email to %s with subject %s" % (msg["To"], msg["Subject"]))
-        smtp = smtplib.SMTP("smtpgw.futurice.com")
-        smtp.sendmail("it@futurice.com", email, msg.as_string())
+        smtp = smtplib.SMTP(settings.SMTP)
+        smtp.sendmail(settings.EMAIL_FROM, email, msg.as_string())
         smtp.close()
 
