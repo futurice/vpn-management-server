@@ -1,0 +1,11 @@
+Hi,
+Your Futurice VPN certificate {{cert_name}} is going to expire in {{days_left}} days.
+
+If you still need VPN, please go to https://vpnmanagement.futurice.com/ and follow
+instructions to renew it. If you don't need VPN, you can just ignore these mails.
+
+You get this email 30 days and 14 days before certificate expires. Also, for last 5
+days, you get this email every day.
+
+Best regards,
+IT Team

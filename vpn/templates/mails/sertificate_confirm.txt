@@ -1,0 +1,11 @@
+Hi,
+Please see attached zip file. There is your certificate and sample configuration files for Mac, Linux and Windows.
+
+If you have problems with configuring OpenVPN, please look at our OpenVPN instructions:
+https://confluence.futurice.com/display/IT/OpenVPN
+If you can't find answer to your problem, please come to see IT team, or send email (you can reply to this email).
+
+Please remember that VPN certificates and keys are absolutely private. You may never share your VPN keys with anyone else.
+
+-- 
+IT team
