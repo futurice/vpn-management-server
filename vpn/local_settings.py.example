@@ -1,7 +1,13 @@
-#LDAP_AUTH SETTINGS
+""" LDAP_AUTH SETTINGS """
 LDAP_SERVER = "ldap_server_uri"
 LDAP_USER = "ldap_bind_user"
 LDAP_PASSWORD = "ldap_bind_password"
+DC = "dc=Example,dc=com"
+USERS_OU = "ou=People"
+ADMINS_OU = "ou=Hosts,ou=Groups"
+PROJECTS_OU = "ou=Projects,ou=Groups"
+TEAMS_OU = "ou=Teams,ou=Groups"
+ADMIN_TEAM_NAME = "TeamIT"
 
 SECRET_KEY=''
 
