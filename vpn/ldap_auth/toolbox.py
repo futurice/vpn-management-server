@@ -28,6 +28,7 @@ def get_binded_connection():
     """
     con = ldap.initialize(settings.LDAP_SERVER)
     con.simple_bind_s(settings.LDAP_USER, settings.LDAP_PASSWORD)
+
     return con
 
 def get_user(username) :
@@ -40,7 +41,7 @@ def get_user(username) :
     """
     username = _unicode_to_str(username)
     con = get_binded_connection()
-    user = con.search_s("ou=People,dc=Futurice,dc=com", ldap.SCOPE_ONELEVEL, "(&(objectClass=inetOrgPerson)(uid=%s))" % username)
+    user = con.search_s("%s,%s" % (settings.USERS_OU, settings.DC), ldap.SCOPE_ONELEVEL, "(&(objectClass=inetOrgPerson)(uid=%s))" % username)
     con.unbind_s()
     if user :
         return user[0][1]
@@ -53,8 +54,8 @@ def get_sudoers(machine_name) :
     """
     machine_name = _unicode_to_str(machine_name)
     con = get_binded_connection()
-    sudoers = con.search_s("ou=Hosts,ou=Groups,dc=Futurice,dc=com", ldap.SCOPE_ONELEVEL,
-            "(&(objectClass=posixGroup)(uniqueMember=uid=*,ou=People,dc=Futurice,dc=com)(cn=%s))" % machine_name, ["uniqueMember"])
+    sudoers = con.search_s("%s,%s" % (settings.ADMINS_OU, settings.DC), ldap.SCOPE_ONELEVEL,
+            "(&(objectClass=posixGroup)(uniqueMember=uid=*,%s,%s)(cn=%s))" % machine_name, settings.USERS_OU, settings.DC, ["uniqueMember"])
     con.unbind_s()
     if sudoers :
         return[re.match("^uid=(?P<uid>[a-z]{4}).*$", result).group("uid") for result in sudoers[0][1]["uniqueMember"]]
@@ -68,7 +69,7 @@ def get_free_uidNumber() :
     #we find the first gid available
     con = get_binded_connection()
     nbrs = [int(result[1]["uidNumber"][0]) for result in\
-                                  con.search_s("ou=People,dc=futurice,dc=com",
+                                  con.search_s("%s,%s" % (settings.USERS_OU, settings.DC),
                                   ldap.SCOPE_SUBTREE, "(uidNumber=*)",  ['uidNumber'])]
     con.unbind_s()
     return max(nbrs) + 1
@@ -79,7 +80,7 @@ def get_project_groups(keyword):
     """
     con = get_binded_connection()
     groups = [result[1]["cn"][0] for result in\
-                                  con.search_s("ou=Projects,ou=Groups,dc=futurice,dc=com",
+                                  con.search_s("%s,%s" % (settings.PROJECTS_OU, settings.DC),
                                   ldap.SCOPE_SUBTREE, "(cn=*)",  ['cn'])]
     con.unbind_s()
     return filter(lambda proj: re.search(keyword, proj, re.IGNORECASE), groups)
@@ -90,7 +91,7 @@ def get_usernames(keyword):
     """
     con = get_binded_connection()
     usernames = [result[1]["uid"][0] for result in\
-                                  con.search_s("ou=People,dc=futurice,dc=com",
+                                  con.search_s("%s,%s" % (settings.USERS_OU, settings.DC),
                                   ldap.SCOPE_SUBTREE, "(uid=*)",  ['uid'])]
     con.unbind_s()
     return filter(lambda username: re.search(keyword, username, re.IGNORECASE), usernames)
@@ -100,8 +101,8 @@ def get_admin_usernames():
     This function returns the list of all the admins usernames
     """
     con = get_binded_connection()
-    users = con.search_s("ou=Teams,ou=Groups,dc=futurice,dc=com",
-                                  ldap.SCOPE_SUBTREE, "(cn=TeamIT)",  ['uniqueMember'])[0][1]["uniqueMember"]
+    users = con.search_s("%s,%s" % (settings.TEAMS_OU, settings.DC),
+                                  ldap.SCOPE_SUBTREE, "(cn=" + settings.ADMIN_TEAM_NAME + ")",  ['uniqueMember'])[0][1]["uniqueMember"]
     users = [user[4:8] for user in users]
     con.unbind_s()
     return users
