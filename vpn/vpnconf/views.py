@@ -58,7 +58,7 @@ def create_new(request, template_name):
         if form.is_valid():
             data = {'email': get_user(request.user.username)['mail'][0], 'computer_type': form.cleaned_data['computer_type'], 'computer_owner': form.cleaned_data['computer_owner'], 'employment': form.cleaned_data['employment']}
             request.session['preferences'] = data
-            return HttpResponseRedirect("/vpn/vpnconf/create_new/upload")
+            return HttpResponseRedirect("/vpnconf/create_new/upload")
     else:
         request.session.flush()
         request.session['session_enabled'] = True
@@ -72,10 +72,10 @@ def create_new_upload(request, template_name):
     """ Create new request (upload or paste) """
     errors = False
     if not is_valid_session(request):
-        return HttpResponseRedirect("/vpn/vpnconf/invalid_session")
+        return HttpResponseRedirect("/vpnconf/invalid_session")
 
     if not request.session.get("preferences"):
-        return HttpResponseRedirect("/vpn/vpnconf/invalid_session")
+        return HttpResponseRedirect("/vpnconf/invalid_session")
       
     if request.method == "POST":
         form = UploadFileForm(request.POST, request.FILES)
@@ -96,7 +96,7 @@ def create_new_upload(request, template_name):
             request.session['fields'] = fields
             if status:
                 request.session['csrfilename'] = filename
-                return HttpResponseRedirect("/vpn/vpnconf/create_new/csr")
+                return HttpResponseRedirect("/vpnconf/create_new/csr")
             else:
                 # handle cleanup
                 os.remove(filename)
@@ -124,9 +124,9 @@ def create_new_upload(request, template_name):
 def create_new_csr(request, template_name):
     """ Validates uploaded CSR """
     if not is_valid_session(request):
-        return HttpResponseRedirect("/vpn/vpnconf/invalid_session")
+        return HttpResponseRedirect("/vpnconf/invalid_session")
     if not request.session.get("csrfilename"):
-        return HttpResponseRedirect("/vpn/vpnconf/invalid_session")
+        return HttpResponseRedirect("/vpnconf/invalid_session")
 
     filename = request.session.get("csrfilename")
 
@@ -142,24 +142,24 @@ def create_new_send_password(request):
     """ Creates new password and sends it using SMS gateway on backupmaster """
 
     if not is_valid_session(request):
-        return HttpResponseRedirect("/vpn/vpnconf/invalid_session")
+        return HttpResponseRedirect("/vpnconf/invalid_session")
 
     if not request.session.get("smssent"): # send SMS only once
         status = api_gen_and_send_password(request.user.username)
         if not status.get("valid_sms", True):
-            return HttpResponseRedirect("/vpn/vpnconf/invalid_phone")
+            return HttpResponseRedirect("/vpnconf/invalid_phone")
         if not status.get("success"):
             return HttpResponse("Fatal error: %s" % status.get("message"))
 
         request.session['password'] = status.get("password")
         request.session['smssent'] = True
 
-    return HttpResponseRedirect("/vpn/vpnconf/create_new/password")
+    return HttpResponseRedirect("/vpnconf/create_new/password")
 
 @login_required
 def create_new_password(request, template_name):
     if not is_valid_session(request):
-        return HttpResponseRedirect("/vpn/vpnconf/invalid_session")
+        return HttpResponseRedirect("/vpnconf/invalid_session")
 
     error = None
     if request.method == "POST":
@@ -167,14 +167,14 @@ def create_new_password(request, template_name):
         if form.is_valid():
             if form.cleaned_data['passwordfield'] == request.session.get('password'):
                 if request.session.get("valid"):
-                    return HttpResponseRedirect("/vpn/vpnconf/create_new/finished")
+                    return HttpResponseRedirect("/vpnconf/create_new/finished")
 
                 preferences = request.session.get("preferences")
                 email = preferences.get("email")
 
                 api_sign_and_deploy(request.user.username, request.session["csrfilename"], email)
                 request.session['valid'] = True # there is valid certificate
-                return HttpResponseRedirect("/vpn/vpnconf/create_new/finished")
+                return HttpResponseRedirect("/vpnconf/create_new/finished")
 
         error = "Invalid password. Password is case sensitive."
     else:
@@ -184,7 +184,7 @@ def create_new_password(request, template_name):
 @login_required
 def create_new_finished(request, template_name):
     if not is_valid_session(request):
-        return HttpResponseRedirect("/vpn/vpnconf/invalid_session")
+        return HttpResponseRedirect("/vpnconf/invalid_session")
 
     if not request.session.get('valid'):
         return HttpResponse("Nice try.")
