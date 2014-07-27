@@ -77,20 +77,7 @@ class sign(object):
         cn = self.fields['common_name']
         move(self.csrfile, "%s/%s.csr" % (settings.KEYPATH, cn))
         args = ["openssl", "ca", "-batch", "-days", "365", "-out", "%s/%s.crt" % (settings.KEYPATH, cn), "-in", "%s/%s.csr" % (settings.KEYPATH, cn), "-md", "sha1", "-config", settings.OPENSSL_CNF_PATH, "-passin", "pass:%s" % self.password]
-        env_list = {"KEY_DIR": settings.KEYPATH,
-            "KEY_SIZE": "2048",
-            "PATH": "/bin:/usr/bin:/usr/sbin:/sbin",
-            "KEY_COUNTRY": "FI",
-            "KEY_PROVINCE": "Uusimaa",
-            "KEY_CITY": "Helsinki",
-            "KEY_ORG": "Futurice Oy",
-            "PKCS11_MODULE_PATH": "/usr/lib",
-            "PKCS11_PIN": "1298479823754987",
-            "KEY_CN": "futurice-invalid",
-            "KEY_EMAIL": "ssl@futurice.com",
-            "KEY_OU": "OpenVPN Machines"}
-        
-        pid = subprocess.Popen(args, env=env_list)#, stdout=subprocess.PIPE)
+        pid = subprocess.Popen(args, env=settings.KEY_ENV_VARIABLES)#, stdout=subprocess.PIPE)
         (stdoutmsg, stderrmsg) = pid.communicate()
         self.repository.finish_repository("Added certificate for %s" % cn)
         return (True, stdoutmsg)
@@ -105,23 +92,11 @@ class sign(object):
             # No old crt available -> no reason to revoke
             return False
         args = ["openssl", "ca", "-revoke", "%s/%s.crt" % (settings.KEYPATH, cn), "-config", settings.OPENSSL_CNF_PATH, "-passin", "pass:%s" % self.password]
-        env_list = {"KEY_DIR": settings.KEYPATH,
-            "KEY_SIZE": "2048",
-            "PATH": "/bin:/usr/bin:/usr/sbin:/sbin",
-            "KEY_COUNTRY": "FI",
-            "KEY_PROVINCE": "Uusimaa",
-            "KEY_CITY": "Helsinki",
-            "KEY_ORG": "Futurice Oy",
-            "PKCS11_MODULE_PATH": "/usr/lib",
-            "PKCS11_PIN": "1298479823754987",
-            "KEY_CN": "futurice-invalid",
-            "KEY_EMAIL": "ssl@futurice.com",
-            "CRL": "%s/crl.pem" % settings.KEYPATH,
-            "KEY_OU": "OpenVPN Machines"}
-        pid = subprocess.Popen(args, env=env_list)#, stdout=subprocess.PIPE)
+        
+        pid = subprocess.Popen(args, env=settings.KEY_ENV_VARIABLES)#, stdout=subprocess.PIPE)
         (stdoutmsg, stderrmsg) = pid.communicate()
         args = ["openssl", "ca", "-gencrl", "-out", "%s/crl.pem" % settings.KEYPATH, "-config", settings.OPENSSL_CNF_PATH, "-passin", "pass:%s" % self.password]
-        pid = subprocess.Popen(args, env=env_list)#, stdout=subprocess.PIPE)
+        pid = subprocess.Popen(args, env=settings.KEY_ENV_VARIABLES)#, stdout=subprocess.PIPE)
         (stdoutmsg, stderrmsg) = pid.communicate()
         self.repository.finish_repository("Revoked certificate %s" % cn)
 

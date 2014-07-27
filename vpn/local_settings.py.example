@@ -21,10 +21,27 @@ VPN_COUNTRIES = []
 VPN_ORGANIZATIONS = []
 VPN_OU = []
 
+""" Email settings """
 EMAIL_FROM = "admin@localhost.com"
 ALERT_MAIL_SUBJECT = "VPN cert is going to expire"
 SERTIFICATE_MAIL_SUBJECT = "Your VPN certificate for %s"
 SMTP = "smtp.localhost"
 
+""" Key settings """ 
 KEYPATH = "/path/to/keys"
 OPENSSL_CNF_PATH = "/path/to/openssl.cnf"
+
+# Env variables for signing the certificate
+KEY_ENV_VARIABLES = {"KEY_DIR": KEYPATH,
+            "KEY_SIZE": "",
+            "PATH": "",
+            "KEY_COUNTRY": "",
+            "KEY_PROVINCE": "",
+            "KEY_CITY": "",
+            "KEY_ORG": "",
+            "PKCS11_MODULE_PATH": "",
+            "PKCS11_PIN": "",
+            "KEY_CN": "", #This can't be empty, but it isn't used
+            "KEY_EMAIL": "",
+            "CRL": "%s/crl.pem" % KEYPATH,
+            "KEY_OU": ""}
