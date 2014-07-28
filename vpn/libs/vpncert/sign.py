@@ -1,4 +1,3 @@
-from password import Password
 from vpncert import vpncert
 
 import time
@@ -49,7 +48,7 @@ class repository(object):
 
 class sign(object):
     def __init__(self, csrfile, username):
-        self.password = Password.PASSWORD
+        self.password = settings.CERT_PASSWORD
         self.certmanager = vpncert(username)
         self.csrfile = csrfile
         self.valid = True
