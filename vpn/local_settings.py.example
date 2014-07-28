@@ -30,6 +30,7 @@ SMTP = "smtp.localhost"
 """ Key settings """ 
 KEYPATH = "/path/to/keys"
 OPENSSL_CNF_PATH = "/path/to/openssl.cnf"
+CERT_PASSWORD = "password_for_certificate"
 
 # Env variables for signing the certificate
 KEY_ENV_VARIABLES = {"KEY_DIR": KEYPATH,
