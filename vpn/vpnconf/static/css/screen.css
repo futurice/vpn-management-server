@@ -268,7 +268,7 @@ table .help {
 }
 #titlebar {
 	height: 3em;
-	background: url('/vpn/static/images/bg_navigation.png') repeat-x bottom left;
+	background: url('/static/images/bg_navigation.png') repeat-x bottom left;
     color: white;
 	padding-left: 1em;
 }
@@ -410,14 +410,14 @@ td.job-report {
 }
 .rounded-bar .left.corner {
     float: left;
-    background: transparent url('/vpn/static/images/green-corner.gif') no-repeat scroll left top
+    background: transparent url('/static/images/green-corner.gif') no-repeat scroll left top
 }
 .rounded-bar .right.corner {
     float: right;
-    background: transparent url('/vpn/static/images/green-corner.gif') no-repeat scroll right top
+    background: transparent url('/static/images/green-corner.gif') no-repeat scroll right top
 }
 #futurice-logo .left.corner, #futurice-logo .right.corner {
-    background-image: url('/vpn/static/images/white-corner.gif')
+    background-image: url('/static/images/white-corner.gif')
 }
 #futurice-logo .center {
     background-color: white;
@@ -436,17 +436,17 @@ td.job-report {
 
 /*table sorter*/
 th.sorting{
-    background-image: url('/vpn/static/images/no_order.gif');
+    background-image: url('/static/images/no_order.gif');
     background-repeat: no-repeat;
     background-position: 95% center;
 }
 th.sorting_desc{
-    background-image: url('/vpn/static/images/incr_order.gif');
+    background-image: url('/static/images/incr_order.gif');
     background-repeat: no-repeat;
     background-position: 95% center;
 }
 th.sorting_asc{
-    background-image: url('/vpn/static/images/decr_order.gif');
+    background-image: url('/static/images/decr_order.gif');
     background-repeat: no-repeat;
     background-position: 95% center;
 }
