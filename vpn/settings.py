@@ -5,6 +5,8 @@ from local_settings import *
 
 sys.path.append(os.path.abspath(".") + "/libs/vpncert/")
 
+PROJECT_ROOT = os.path.realpath(os.path.join(os.path.dirname(__file__), '..'))
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 

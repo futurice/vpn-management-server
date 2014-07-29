@@ -113,7 +113,7 @@ nobind
 persist-key
 persist-tun
 
-ca chain_futurice_openvpn_server_ca.pem
+ca %s
 cert %s.crt
 key %s.key
 
@@ -129,7 +129,7 @@ nobind
 persist-key
 persist-tun
 
-ca /path/to/chain_futurice_openvpn_server_ca.pem
+ca /path/to/%s
 cert /path/to/%s.crt
 key /path/to/%s.key
 
@@ -146,7 +146,7 @@ nobind
 persist-key
 persist-tun
 
-ca chain_futurice_openvpn_server_ca.pem
+ca %s
 cert %s.crt
 key %s.key
 
@@ -156,21 +156,21 @@ comp-lzo"""
 
 
         tempdir = mkdtemp()
-        for endpoint, name in [ ( "hel-openvpn.futurice.com", "helsinki"), ( "ber-openvpn.futurice.com", "berlin" ), ( "tre-openvpn.futurice.com", "tampere" ) ]:
+        for endpoint, name in settings.VPN_ENDPOINTS:
             f = open(tempdir+"/futurice-windows-%s.ovpn" % name, "w")
-            f.write(WINDOWSCONF % (endpoint, cn, cn))
+            f.write(WINDOWSCONF % (endpoint, settings.CERT_NAME, cn, cn))
             f.close()
             f = open(tempdir+"/futurice-mac-%s.conf" % name, "w")
-            f.write(MACCONF % (endpoint, cn, cn))
+            f.write(MACCONF % (endpoint, settings.CERT_NAME, cn, cn))
             f.close()
             f = open(tempdir+"/futurice-linux-%s.conf" % name, "w")
-            f.write(LINUXCONF % (endpoint, cn, cn))
+            f.write(LINUXCONF % (endpoint, settings.CERT_NAME, cn, cn))
             f.close()
         
         copy("%s/%s.crt" % (settings.KEYPATH, cn), tempdir+"/%s.crt" % cn)
-        copy("%s/chain_futurice_openvpn_server_ca.pem" % settings.KEYPATH, "%s/chain_futurice_openvpn_server_ca.pem" % tempdir)
+        copy("%s/%s" % (settings.KEYPATH, settings.CERT_NAME), "%s/%s" % (tempdir, settings.CERT_NAME))
         
-        zip = zipfile.ZipFile("/home/vpn/vpn/vpn/static/zip/%s.zip" % cn, "w")
+        zip = zipfile.ZipFile(settings.PROJECT_ROOT + "/vpn/static/zip/%s.zip" % cn, "w")
         for filename in glob("%s/*" % tempdir):
             zip.write(filename, basename(filename))
         zip.close()
@@ -192,7 +192,7 @@ comp-lzo"""
         msg['Subject'] = settings.SERTIFICATE_MAIL_SUBJECT % cn
         msg.attach( MIMEText(text) )
 
-        zip_filename = "/home/vpn/vpn/vpn/static/zip/%s.zip" % cn
+        zip_filename = settings.PROJECT_ROOT + "/vpn/static/zip/%s.zip" % cn
         logging.debug("Adding mime attachment from %s" % zip_filename)
         part = MIMEBase('application', "octet-stream")
         part.set_payload( open(zip_filename, "rb").read() )
