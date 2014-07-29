@@ -48,7 +48,7 @@ class repository(object):
 
 class sign(object):
     def __init__(self, csrfile, username):
-        self.password = settings.CERT_PASSWORD
+        self.password = settings.CA_PASSWORD
         self.certmanager = vpncert(username)
         self.csrfile = csrfile
         self.valid = True
@@ -158,17 +158,17 @@ comp-lzo"""
         tempdir = mkdtemp()
         for endpoint, name in settings.VPN_ENDPOINTS:
             f = open(tempdir+"/futurice-windows-%s.ovpn" % name, "w")
-            f.write(WINDOWSCONF % (endpoint, settings.CERT_NAME, cn, cn))
+            f.write(WINDOWSCONF % (endpoint, settings.CA_PEM_FILE_NAME, cn, cn))
             f.close()
             f = open(tempdir+"/futurice-mac-%s.conf" % name, "w")
-            f.write(MACCONF % (endpoint, settings.CERT_NAME, cn, cn))
+            f.write(MACCONF % (endpoint, settings.CA_PEM_FILE_NAME, cn, cn))
             f.close()
             f = open(tempdir+"/futurice-linux-%s.conf" % name, "w")
-            f.write(LINUXCONF % (endpoint, settings.CERT_NAME, cn, cn))
+            f.write(LINUXCONF % (endpoint, settings.CA_PEM_FILE_NAME, cn, cn))
             f.close()
         
         copy("%s/%s.crt" % (settings.KEYPATH, cn), tempdir+"/%s.crt" % cn)
-        copy("%s/%s" % (settings.KEYPATH, settings.CERT_NAME), "%s/%s" % (tempdir, settings.CERT_NAME))
+        copy("%s/%s" % (settings.KEYPATH, settings.CA_PEM_FILE_NAME), "%s/%s" % (tempdir, settings.CA_PEM_FILE_NAME))
         
         zip = zipfile.ZipFile(settings.PROJECT_ROOT + "/vpn/static/zip/%s.zip" % cn, "w")
         for filename in glob("%s/*" % tempdir):
