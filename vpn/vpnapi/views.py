@@ -86,7 +86,7 @@ def post_verification(request):
             if cn is None:
                 return HttpResponse(json.dumps({"success": False, "message": "Internal error while signing."}))
 
-            return HttpResponse(json.dumps({"success": True, "zip_url": "https://vpnmanagement.futurice.com/vpn/api/zip/%s.zip" % cn}))
+            return HttpResponse(json.dumps({"success": True, "zip_url": settings.BASE_URL + "/api/zip/%s.zip" % cn}))
         return HttpResponse(json.dumps({"success": False, "message": "Wrong password"}))
 
     else:

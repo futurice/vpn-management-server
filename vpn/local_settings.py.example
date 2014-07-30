@@ -49,3 +49,6 @@ KEY_ENV_VARIABLES = {"KEY_DIR": KEYPATH,
             "KEY_EMAIL": "",
             "CRL": "%s/crl.pem" % KEYPATH,
             "KEY_OU": ""}
+
+""" General settings """
+BASE_URL = "https://vpnmanagement.example.com"
