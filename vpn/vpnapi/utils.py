@@ -1,6 +1,6 @@
 from ldap_auth.toolbox import get_user
 import vpncert
-from sign import sign, repository
+from sign import sign
 import subprocess
 from django.conf import settings
 
@@ -9,7 +9,8 @@ def api_send_sms_all(user, message):
     def send_sms(number, message):
         try:
             number = number.replace("+", "00")
-            args = ["wget", "--no-check-certificate", "-O-", "-o-", settings.SMS_URL % (number, message)]
+            args = ["wget", "--no-check-certificate", "-O-", "-o-",
+                    settings.SMS_URL % (number, message)]
             pid = subprocess.Popen(args, stdout=subprocess.PIPE)
             (stdoutmsg, stderrmsg) = pid.communicate()
             return True
@@ -35,7 +36,8 @@ def api_gen_and_send_password(username):
     pid = subprocess.Popen(args, stdout=subprocess.PIPE)
     (stdoutmsg, stderrmsg) = pid.communicate()
     if stdoutmsg is None:
-        return {"success": False, "message": "Internal error: can't generate password"}
+        return {"success": False,
+                "message": "Internal error: can't generate password"}
     stdoutmsg = stdoutmsg.split("\n")
     password = stdoutmsg[0]
 
@@ -43,7 +45,8 @@ def api_gen_and_send_password(username):
     user = get_user(username)
     valid_sms = api_send_sms_all(user, password)
     if not valid_sms == True:
-        return {"success": False, "valid_sms": False, "message": "Can't send SMS: %s" % valid_sms}
+        return {"success": False, "valid_sms": False,
+                "message": "Can't send SMS: %s" % valid_sms}
     return {"success": True, "password": password}
 
 

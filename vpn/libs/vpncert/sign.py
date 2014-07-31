@@ -1,12 +1,11 @@
 from vpncert import vpncert
 
-import time
 import smtplib
 import os
 from email.MIMEMultipart import MIMEMultipart
 from email.MIMEBase import MIMEBase
 from email.MIMEText import MIMEText
-from email.Utils import COMMASPACE, formatdate
+from email.Utils import formatdate
 from email import Encoders
 from os.path import basename
 from glob import glob
@@ -43,7 +42,7 @@ class repository(object):
         args = ["hg", "push"]
         pid = subprocess.Popen(args, cwd=settings.KEYPATH)
         pid.wait()
-        
+
 
 
 class sign(object):
@@ -75,7 +74,11 @@ class sign(object):
         self.repository.prepare_repository()
         cn = self.fields['common_name']
         move(self.csrfile, "%s/%s.csr" % (settings.KEYPATH, cn))
-        args = ["openssl", "ca", "-batch", "-days", "365", "-out", "%s/%s.crt" % (settings.KEYPATH, cn), "-in", "%s/%s.csr" % (settings.KEYPATH, cn), "-md", "sha1", "-config", settings.OPENSSL_CNF_PATH, "-passin", "pass:%s" % self.password]
+        args = ["openssl", "ca", "-batch", "-days", "365", "-out", "%s/%s.crt"
+                % (settings.KEYPATH, cn), "-in", "%s/%s.csr" % (settings.KEYPATH, cn),
+                "-md", "sha1", "-config", settings.OPENSSL_CNF_PATH,
+                "-passin", "pass:%s" % self.password]
+
         pid = subprocess.Popen(args, env=settings.KEY_ENV_VARIABLES)#, stdout=subprocess.PIPE)
         (stdoutmsg, stderrmsg) = pid.communicate()
         self.repository.finish_repository("Added certificate for %s" % cn)
@@ -90,11 +93,16 @@ class sign(object):
         if not os.path.exists("%s/%s.crt" % (settings.KEYPATH, cn)):
             # No old crt available -> no reason to revoke
             return False
-        args = ["openssl", "ca", "-revoke", "%s/%s.crt" % (settings.KEYPATH, cn), "-config", settings.OPENSSL_CNF_PATH, "-passin", "pass:%s" % self.password]
-        
+        args = ["openssl", "ca", "-revoke", "%s/%s.crt"
+                % (settings.KEYPATH, cn), "-config", settings.OPENSSL_CNF_PATH,
+                "-passin", "pass:%s" % self.password]
+
         pid = subprocess.Popen(args, env=settings.KEY_ENV_VARIABLES)#, stdout=subprocess.PIPE)
         (stdoutmsg, stderrmsg) = pid.communicate()
-        args = ["openssl", "ca", "-gencrl", "-out", "%s/crl.pem" % settings.KEYPATH, "-config", settings.OPENSSL_CNF_PATH, "-passin", "pass:%s" % self.password]
+        args = ["openssl", "ca", "-gencrl", "-out", "%s/crl.pem"
+                % settings.KEYPATH, "-config", settings.OPENSSL_CNF_PATH,
+                "-passin", "pass:%s" % self.password]
+
         pid = subprocess.Popen(args, env=settings.KEY_ENV_VARIABLES)#, stdout=subprocess.PIPE)
         (stdoutmsg, stderrmsg) = pid.communicate()
         self.repository.finish_repository("Revoked certificate %s" % cn)
@@ -104,7 +112,7 @@ class sign(object):
         if not self.valid:
             return self.valid
         cn = self.fields['common_name']
-        MACCONF="""client
+        MACCONF = """client
 dev tap
 proto udp
 remote %s
@@ -120,7 +128,7 @@ key %s.key
 ns-cert-type server
 cipher  AES-256-CBC
 comp-lzo"""
-        LINUXCONF="""client
+        LINUXCONF = """client
 dev tap
 proto udp
 remote %s
@@ -137,7 +145,7 @@ ns-cert-type server
 cipher  AES-256-CBC
 comp-lzo"""
 
-        WINDOWSCONF="""client
+        WINDOWSCONF = """client
 dev tap
 proto udp
 remote %s
@@ -152,7 +160,7 @@ key %s.key
 
 ns-cert-type server
 cipher  AES-256-CBC
-comp-lzo""" 
+comp-lzo"""
 
 
         tempdir = mkdtemp()
@@ -166,11 +174,13 @@ comp-lzo"""
             f = open(tempdir+"/futurice-linux-%s.conf" % name, "w")
             f.write(LINUXCONF % (endpoint, settings.CA_PEM_FILE_NAME, cn, cn))
             f.close()
-        
+
         copy("%s/%s.crt" % (settings.KEYPATH, cn), tempdir+"/%s.crt" % cn)
-        copy("%s/%s" % (settings.KEYPATH, settings.CA_PEM_FILE_NAME), "%s/%s" % (tempdir, settings.CA_PEM_FILE_NAME))
-        
-        zip = zipfile.ZipFile(settings.PROJECT_ROOT + "/vpn/static/zip/%s.zip" % cn, "w")
+        copy("%s/%s" % (settings.KEYPATH, settings.CA_PEM_FILE_NAME), "%s/%s"
+             % (tempdir, settings.CA_PEM_FILE_NAME))
+
+        zip = zipfile.ZipFile(settings.PROJECT_ROOT + "/vpn/static/zip/%s.zip"
+                              % cn, "w")
         for filename in glob("%s/*" % tempdir):
             zip.write(filename, basename(filename))
         zip.close()
@@ -200,7 +210,8 @@ comp-lzo"""
         part.add_header('Content-Disposition', 'attachment; filename="%s.zip"' % cn)
         msg.attach(part)
 
-        logging.debug("Sending email to %s with subject %s" % (msg["To"], msg["Subject"]))
+        logging.debug("Sending email to %s with subject %s"
+            % (msg["To"], msg["Subject"]))
         smtp = smtplib.SMTP(settings.SMTP)
         smtp.sendmail(settings.EMAIL_FROM, email, msg.as_string())
         smtp.close()
