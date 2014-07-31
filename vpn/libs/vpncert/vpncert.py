@@ -2,16 +2,13 @@
 import logging
 import json
 from os.path import basename, exists as file_exists
-from glob import glob 
+from glob import glob
 import subprocess
 import time
 import smtplib
-from math import floor
 from email.MIMEMultipart import MIMEMultipart
-from email.MIMEBase import MIMEBase
 from email.MIMEText import MIMEText
-from email.Utils import COMMASPACE, formatdate
-from email import Encoders
+from email.Utils import formatdate
 import settings
 from django.template.loader import render_to_string
 
@@ -21,8 +18,9 @@ class alert(object):
         self.vpncert = vpncert()
 
     def send_alert(self, certinfo):
-        text = render_to_string('mails/alert_mail.txt', 
-            {"cert_name" : certinfo["filename"].replace(".crt", ""), "days_left" : certinfo["not_after_days"]})
+        text = render_to_string('mails/alert_mail.txt',
+                                {"cert_name" : certinfo["filename"].replace(".crt", ""),
+                                 "days_left" : certinfo["not_after_days"]})
 
         if self.dry_run:
             print alert_msg
@@ -36,7 +34,8 @@ class alert(object):
         msg['Subject'] = settings.ALERT_MAIL_SUBJECT
         msg.attach( MIMEText(text) )
 
-        logging.debug("Sending email to %s with subject %s" % (msg["To"], msg["Subject"]))
+        logging.debug("Sending email to %s with subject %s"
+                      % (msg["To"], msg["Subject"]))
         smtp = smtplib.SMTP(settings.SMTP)
         try:
             smtp.sendmail(settings.EMAIL_FROM, email, msg.as_string())
@@ -49,17 +48,17 @@ class alert(object):
 
     def run(self):
         for filename in glob(settings.KEYPATH + "/*-*.crt"):
-             certinfo = self.vpncert.process_cert(filename)
-             if certinfo is None:
-                  continue
-             if certinfo["not_after_days"] < 0:
-                  continue
-             if certinfo["not_after_days"] == 30:
-                  self.send_alert(certinfo)
-             if certinfo["not_after_days"] == 14:
-                  self.send_alert(certinfo)
-             if certinfo["not_after_days"] < 5:
-                  self.send_alert(certinfo)
+            certinfo = self.vpncert.process_cert(filename)
+            if certinfo is None:
+                continue
+            if certinfo["not_after_days"] < 0:
+                continue
+            if certinfo["not_after_days"] == 30:
+                self.send_alert(certinfo)
+            if certinfo["not_after_days"] == 14:
+                self.send_alert(certinfo)
+            if certinfo["not_after_days"] < 5:
+                self.send_alert(certinfo)
 
 
 """
@@ -78,44 +77,44 @@ class vpncert(object):
         self.username = username
 
     def process_cert(self, filename):
-            args = ["openssl", "x509", "-in",  filename, "-noout", "-text" ]
-            pid = subprocess.Popen(args, stdout=subprocess.PIPE)
-            (stdoutmsg, stderrmsg) = pid.communicate()
-            if stdoutmsg is None:
-                return None
-            stdoutmsg = stdoutmsg.split("\n")
-            atime = None
-            ctime = None
-            for line in stdoutmsg:
-                if "Not After : " in line:
-                    line = line.strip().replace("Not After : ", "")
-                    atime = time.strptime(line, "%b %d %H:%M:%S %Y %Z")
-                if "Not Before: " in line:
-                    line = line.strip().replace("Not Before: ", "")
-                    ctime = time.strptime(line, "%b %d %H:%M:%S %Y %Z")
-            if atime is not None and ctime is not None:
-                return {'not_after': atime, 
-                              'not_after_printable': time.strftime('%Y-%m-%d', atime),
-                              'not_after_days': int((time.mktime(atime) - time.time()) / 86400),
-                              'not_before': ctime, 
-                              'not_before_printable': time.strftime('%Y-%m-%d', ctime), 
-                              'validity_length': int((time.mktime(atime) - time.mktime(ctime)) / 86400),
-                              'filename': basename(filename)}
+        args = ["openssl", "x509", "-in",  filename, "-noout", "-text" ]
+        pid = subprocess.Popen(args, stdout=subprocess.PIPE)
+        (stdoutmsg, stderrmsg) = pid.communicate()
+        if stdoutmsg is None:
+            return None
+        stdoutmsg = stdoutmsg.split("\n")
+        atime = None
+        ctime = None
+        for line in stdoutmsg:
+            if "Not After : " in line:
+                line = line.strip().replace("Not After : ", "")
+                atime = time.strptime(line, "%b %d %H:%M:%S %Y %Z")
+            if "Not Before: " in line:
+                line = line.strip().replace("Not Before: ", "")
+                ctime = time.strptime(line, "%b %d %H:%M:%S %Y %Z")
+        if atime is not None and ctime is not None:
+            return {'not_after': atime,
+                    'not_after_printable': time.strftime('%Y-%m-%d', atime),
+                    'not_after_days': int((time.mktime(atime) - time.time()) / 86400),
+                    'not_before': ctime,
+                    'not_before_printable': time.strftime('%Y-%m-%d', ctime),
+                    'validity_length': int((time.mktime(atime) - time.mktime(ctime)) / 86400),
+                    'filename': basename(filename)}
 
     def list_all_certs(self):
         certs = []
         for filename in glob(settings.KEYPATH + "/*-*.crt"):
-             certinfo = self.process_cert(filename)
-             if certinfo is not None:
-                  certs.append(certinfo)
+            certinfo = self.process_cert(filename)
+            if certinfo is not None:
+                certs.append(certinfo)
         return certs
 
     def listcerts(self):
         certs = []
         for filename in glob(settings.KEYPATH + "/" +self.username + "-*.crt"):
-             certinfo = self.process_cert(filename)
-             if certinfo is not None:
-                  certs.append(certinfo)
+            certinfo = self.process_cert(filename)
+            if certinfo is not None:
+                certs.append(certinfo)
         return certs
 
     def validatecert(self, filename):
@@ -125,7 +124,7 @@ class vpncert(object):
             errors.append("Internal error: no such file")
             return (False, errors, fields)
 
-        args = ["openssl", "req", "-in", filename, "-noout", "-text" ]
+        args = ["openssl", "req", "-in", filename, "-noout", "-text"]
         pid = subprocess.Popen(args, stdout=subprocess.PIPE)
         (stdoutmsg, stderrmsg) = pid.communicate()
         if stdoutmsg is None:
