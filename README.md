@@ -2,7 +2,7 @@ VPN Management Server
 =====================
 Description
 -----------
-VPN Management is a self-service tool for users to handle their VPN certificates. The tool consists of two parts, the server and the installation wizard. VPN Management Server provides the interface and [VPN Configuration Wizard](https://github.com/futurice-oss/vpn-management-client) provides the native application for setting up your configurations. The server is integrated into LDAP for authentication and the keys are stored in a Mercurial repository. The application uses OpenVPN.
+VPN Management is a self-service tool for users to handle their VPN certificates. The tool consists of two parts, the server and the installation wizard. VPN Management Server provides the interface and [VPN Configuration Wizard](https://github.com/futurice-oss/vpn-management-client) provides the native application for setting up your configurations. The server is integrated into LDAP for authentication and the keys are stored in a Git repository. The application uses OpenVPN.
 
 The user will create a .key file with the provided wizard or by manually at the web interface and send a certificate request to the server. The server will respond with a one time password. After validating the password, the server will sign the certificate request and send back the right configurations and a CRT.
 
