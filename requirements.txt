@@ -6,3 +6,4 @@ raven>=2.0.0
 simplejson>=2.0.9
 django-crispy-forms>=1.4.0
 pyyaml>=3.11
+GitPython==0.3.2.RC1

@@ -17,32 +17,40 @@ import os.path
 from shutil import move, copy, rmtree
 from django.conf import settings
 from django.template.loader import render_to_string
+from git import *
 
 class repository(object):
     def prepare_repository(self):
-        logging.debug("Running hg pull")
-        args = ["hg", "pull"]
-        pid = subprocess.Popen(args, cwd=settings.KEYPATH)
-        pid.wait()
-        logging.debug("Running hg update")
-        args = ["hg", "update"]
-        pid = subprocess.Popen(args, cwd=settings.KEYPATH)
-        pid.wait()
+        try:
+            repo = Repo(settings.KEYPATH)
+        except InvalidGitRepositoryError:
+            debug.logging("Initializing a new Git repository")
+            repo = Repo.init(settings.KEYPATH)
+        try:
+            o = repo.remote.origin
+            logging.debug("Running Git pull")
+            o.pull()
+        except:
+            logging.debug("No origin defined for Git repository")
 
     def finish_repository(self, message):
-        logging.debug("Running hg add")
-        args = ["hg", "add"]
+        repo = Repo(settings.KEYPATH)
+        logging.debug("Running git add")
+        """
+        GitPython's untracked_files doesn't work at the moment. Using subprocess is a workaround
+        until the official fix can be found from pypi.
+        """
+        args = ["git", "add", "-A"]
         pid = subprocess.Popen(args, cwd=settings.KEYPATH)
         pid.wait()
-        logging.debug("Running hg commit -m %s" % message)
-        args = ["hg", "commit", "-m", message]
-        pid = subprocess.Popen(args, cwd=settings.KEYPATH)
-        pid.wait()
-        logging.debug("Running hg push")
-        args = ["hg", "push"]
-        pid = subprocess.Popen(args, cwd=settings.KEYPATH)
-        pid.wait()
-
+        index = repo.index
+        index.commit(message)
+        try:
+            o = repo.remote.origin
+            logging.debug("Running Git push")
+            o.push()
+        except:
+            logging.debug("No origin defined for Git repository")
 
 
 class sign(object):
